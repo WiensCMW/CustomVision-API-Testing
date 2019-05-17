@@ -53,26 +53,34 @@ namespace Wpf_Landmark_AI
 
             try
             {
-                url = File.ReadAllText(@"C:\Users\cornie\Documents\Microsoft-CustomVision-AI\Image-URL.txt");
-                predictionKey = File.ReadAllText(@"C:\Users\cornie\Documents\Microsoft-CustomVision-AI\Prediction-Key.txt");
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                url = File.ReadAllText(System.IO.Path.Combine(documentsPath, @"Microsoft-CustomVision-AI\Image-URL.txt"));
+                predictionKey = File.ReadAllText(System.IO.Path.Combine(documentsPath, @"Microsoft-CustomVision-AI\Prediction-Key.txt"));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            } 
+            }
             #endregion
 
-            var file = File.ReadAllBytes(fileName);
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Add("Prediction-Key", predictionKey);
+                var file = File.ReadAllBytes(fileName);
 
-                using (var content = new ByteArrayContent(file))
+                using (HttpClient client = new HttpClient())
                 {
-                    content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                    var response = await client.PostAsync(url, content);
+                    client.DefaultRequestHeaders.Add("Prediction-Key", predictionKey);
+
+                    using (var content = new ByteArrayContent(file))
+                    {
+                        content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                        var response = await client.PostAsync(url, content);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
     }
