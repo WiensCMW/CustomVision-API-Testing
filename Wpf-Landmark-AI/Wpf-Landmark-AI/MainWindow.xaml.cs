@@ -74,7 +74,9 @@ namespace Wpf_Landmark_AI
                     using (var content = new ByteArrayContent(file))
                     {
                         content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                        var response = await client.PostAsync(url, content);
+                        HttpResponseMessage response = await client.PostAsync(url, content);
+
+                        string responseString = await response.Content.ReadAsStringAsync();
                     }
                 }
             }
