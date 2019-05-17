@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf_Landmark_AI.Classes;
 
 namespace Wpf_Landmark_AI
 {
@@ -75,8 +77,12 @@ namespace Wpf_Landmark_AI
                     {
                         content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
                         HttpResponseMessage response = await client.PostAsync(url, content);
-
                         string responseString = await response.Content.ReadAsStringAsync();
+
+                        // deserialize response string into CustomVision object, then get the object's prediction list
+                        List<Prediction> predictions = JsonConvert.DeserializeObject<CustomVision>(responseString).predictions;
+
+                        predictionsListView.ItemsSource = predictions;
                     }
                 }
             }

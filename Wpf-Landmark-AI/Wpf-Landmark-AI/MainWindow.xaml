@@ -5,15 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf_Landmark_AI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <StackPanel Margin="10">
             <Button Content="Select Image"
                     HorizontalAlignment="Center"
-                    Click="Button_Click"/>
+                    Click="Button_Click" />
             <Image x:Name="selectedImage"
                    Margin="0,10,0,0"
-                   Stretch="Uniform"/>
+                   Stretch="Uniform" />
         </StackPanel>
+        <ListView x:Name="predictionsListView"
+                  Grid.Column="1"
+                  Width="200"
+                  VerticalAlignment="Center">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Tag"
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding tagName}" />
+                    <GridViewColumn Header="Probability"
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding probability, StringFormat=P2}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
